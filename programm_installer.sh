@@ -120,62 +120,20 @@ if [ $answer == 'y' ] ; then
 
   #install apache2
   sudo apt-get install apache2
-  
-  #open the main configuration file and put in bottom Servername your ip
-  #or localhost, for figure out your ip 
-
-  echo "
-  
-  
-  ###### TIP ######
-  open file vim /etc/apache2/apache2.conf 
-  and put there in the bottom this line
-  ServerName your_ip
-  ran command 'hostname -I' = `hostname -I`
-  return to vim fg
-  ###### END TIP ######"
-
-  sudo vim /etc/apache2/apache2.conf
-  
-  #restart apache2
-  sudo systemctl restart apache2.service
-  
-  #allow in ufw apache2
-  sudo ufw app info "Apache Full"
-  sudo ufw allow in "Apache Full"
-  sudo ufw status
-  
-
-  read -p "do you want to add your own user instead www-data[y/n]: " answer
-  if [ $answer == "y" ] ; then
-    #output tip
-    echo "
-    
-    
-    ###### TIP ######
-    we must edit this file /etc/apache2/envvars
-    and put there this two varialbes:
-    export APACHE_RUN_USER=www-data
-    export APACHE_RUN_GROUP=www-data
-    and change on
-    export APACHE_RUN_USER=neo
-    export APACHE_RUN_GROUP=neo
-    ###### END TIP #####"
-
-    #run editor
-    sudo vim /etc/apache2/envvars
-  fi
+  sudo apt-get install apache2-mpm-prefork
 
   #finish installetion
   echo "
   
   
   ###### FINISH ######
-  Apache2 has been successfuly installed
-  now you could go to the your browser and put there ip server
-  for test your server.
-  Document root is /var/www/html
-  your ip is `hostname -I`"  
+  
+  Веб-сервер Apache2 установлен
+  чтобы проверить работу веб-сервера наберите в браузере ip сервера
+  Директория сайта /var/www/html
+  Ваш ip - `hostname -I`
+  
+  "  
 fi
 
 
@@ -184,22 +142,26 @@ fi
 ###############
 # Install MySQL
 ###############
-read -p "Do you want to install MYSQL and configure?[y/n]: " answer
+read -p "Установить MYSQL и настроить?[y/n]: " answer
 
 if [ $answer == "y" ] ; then
   #install mysql-server
-  sudo apt-get install mysql-server
-  echo "### MYSQ is successfully installed ###";
-  read -p "do you want to install the mysql_secure_installation [y/n]: " answer
+  sudo apt-get install mysql-server mysql-client
+  echo "### MYSQL сервер и клиент установлены ###";
+  read -p "Запустить мастер настройки MYSQL сервера?[y/n]: " answer
 
   if [ $answer == "y" ] ; then
     #set up mysql sequre
     mysql_secure_installation
     echo "#### Congratulate #####"
-    echo "mysql_secure_installation has been successfully installed"
+    echo "MYSQL сервер настроен"
   fi
 
-  echo "MySQL has been successfully installed"
+  echo "
+  
+  MySQL сервер успешно установлен!
+  
+  "
 fi
 
 
@@ -207,57 +169,33 @@ fi
 
 
 ###########################
-# Install php5.6 and php7.0
+# Install php5
 ###########################
-read -p "Do you want to install php5.6 and php 7.0? [y/n]: " answer
+read -p "Хотите установить php5? [y/n]: " answer
 
 if [ $answer == "y" ] ; then
   #install php from official repository
-  sudo apt-get install php libapache2-mod-php php-mcrypt php-mysql
+  sudo apt-get install php5 libapache2-mod-php5 php5-mysql php5-curl php5-gd php5-intl php-pear php5-imagick php5-imap php5-mcrypt php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl
+  sudo apt-get install perl libapache2-mod-perl2	
+  sudo apt-get install python libapache2-mod-python  
 
   #put index.php first in this file
   echo "$EMPTY$TITLE"
   echo "### TIP ###"
-  echo "you have to put index.php on the first place in"
-  echo "this file: '/etc/apache2/mods-enabled/dir.conf'"
+  echo "Для проверки работы PHP будет создан файл, который выводит все параметры PHP."
+  echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+  echo "этот файл нахдится: '/var/www/html/info.php'"
   echo "### TIP ###"
-  sudo vim /etc/apache2/mods-enabled/dir.conf
   #resart apache2
   sudo systemctl restart apache2.service
 
-  echo "php7.0 has been successfully installed"
-
-  #install php5.6 from not official repository
-  echo "#*** We can install php5.6 from not official repository"
-  read -p "Do you want? [y/n]: " answer
-  
-  if [ $answer == "y" ] ; then
-    #add private repository
-    sudo add-apt-repository ppa:ondrej/php
-    #update cash
-    sudo apt-get update
-    #install php and needed libs
-    sudo apt-get install php7.0 php5.6 php5.6-mysql php-gettext php5.6-mbstring php-mbstring php7.0-mbstring php-xdebug libapache2-mod-php5.6 libapache2-mod-php7.0
-    #install zip lib
-    sudo apt-get php7.0-zip
-
-    #set up php5.6 by default
-    sudo a2dismod php7.0
-    sudo a2enmod php5.6
-    sudo systemctl restart apache2.servise
-    sudo update-alternatives --set php /usr/bin/php5.6
-    
-    echo "php5.6 has been successfully installed"
-  fi
+  echo "php5 успешно установлен"
 
   echo "$EMPTY$TITLE"
-  echo "------ InFormation about installation -----"
-  echo "current php version:"
+  echo "------ Информация об установке -----"
+  echo "установленная версия php:"
   echo "`php -v`"
-  echo "for test php on your server you must create"
-  echo "php file assume it could be info.php"
-  echo "and put there function phpinfo();"
-  echo "go to your server and make test!"
+  echo "Для проверки PHP введите в браузере http://адрес_вашего_сервера/info.php должна открыться страница."
 
 fi
 
@@ -266,72 +204,72 @@ fi
 #########################
 # Install PhpMyAdmin
 ########################
-read -p "Do you want to install phpmyadmin? [y/n]: " answer
+read -p "Хотите установить phpmyadmin? [y/n]: " answer
 if [ $answer == "y" ] ; then
   #install needed libs
-  sudo apt-get install phpmyadmin php-mbstring php-gettext
-  sudo apt install php5.6-mcrypt
-  sudo apt install php5.6-mbstring
-  sudo phpenmod mcrypt
-  sudo phpenmod mbstring
+  echo "в ходе установки:"
+  echo "В первом вопросе требуется определиться с установленным web-сервером - Apache2"
+  echo "В следующем шаге мастер попросит разрешения на создания новой базы - yes"
+  echo "Далее нас попросят ввести пароль пользователя root MySQL-сервера - вводим и жмем Enter"
+  echo "Затем нас попросят придумать пароль для доступа в phpMyAdmin - придумываем посложней и жмем Enter"
+  sudo apt-get install phpmyadmin
+
   #restart apache2
   sudo systemctl restart apache2.service
   echo "$EMPTY$TITLE"
-  echo "Now we could go to php my admin input"
-  echo "in browser your_id/phpmyadmin"
-  echo "if site doesn't accessbile follow instruction below"
-  read -p "Can you access phpmyadmin? [y/n]:" answer
+  echo "Теперь можно войти в панель управления phpmyadmin"
+  echo "для этого наберите в браузере http://адрес_вашего_сервера/phpmyadmin"
+  echo "Если страница недоступна то следуйте следующим инструкциям"
+  read -p "Есть доступ к панели управления phpmyadmin? [y/n]:" answer
   if [ $answer == "n" ] ; then
-    echo "$EMPTY$TITLE"
-    echo "if we doesn’t see our site go to this file"
-    echo "go to this file /etc/apache2/apache2.conf"
-    echo "and add in the bottom"
-    echo "Include /etc/phpmyadmin/apache.conf"
-    sudo vim /etc/phpmyadmin/apache.conf
+  sudo cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak_by_script
+  echo "Include /etc/phpmyadmin/apache.conf" | sudo tee -a /etc/apache2/apache2.conf
+
     #restart apache2
     sudo systemctl restart apache2.service
   fi
 
   echo "$EMPTY$TITLE";
-  echo "phpmyadmin have had to be installed and availabel"
-  echo "if everything is right, you can secure your phpmyadmin"
-  read -p "Do you want to secure phpmyadmin? [y/n]: " answer
+  echo "phpmyadmin установлен и авторизован на уровне Apache"
+  echo "если все в порядке вы можете настроить защиту phpmyadmin"
+  read -p "Установить защиту phpmyadmin? [y/n]: " answer
   
   if [ $answer == "y" ] ; then
-    #edit file /etc/apache2/conf-available/phpmyadmin.conf
+    #edit file /etc/phpmyadmin/apache.conf
     echo "$EMPTY$TITLE"
-    echo "you have to configure apache2 to allow .htaccess"
-    echo "edit this file /etc/apache2/conf-available/phpmyadmin.conf"
-    echo "add to this file AllowOverride All within"
-    echo "<Directory /usr/share/phpmyadmin>"
-    echo "AllowOverride All"
-    sudo vim /etc/apache2/conf-available/phpmyadmin.conf
+    echo "Настройка apache2 использовать .htaccess"
+    echo "Будет создана копия файла /etc/phpmyadmin/apache.conf.bak_by_script"
+	echo "в исполняемый файл /etc/phpmyadmin/apache.conf"
+    echo "добавлена строка AllowOverride All"
+    sudo cp /etc/phpmyadmin/apache.conf /etc/phpmyadmin/apache.conf.bak_by_script
+    echo "<Directory /usr/share/phpmyadmin>" | sudo tee -a /etc/phpmyadmin/apache.conf
+    echo "AllowOverride All" | sudo tee -a /etc/phpmyadmin/apache.conf
+    echo "</Directory>" | sudo tee -a /etc/phpmyadmin/apache.conf
     #restart apache2
     sudo systemctl restart apache2
     #edit file /usr/share/phpmyadmin/.htaccess
     echo "$EMPTY$TITLE"
-    echo "now we should add to this file"
-    echo "/usr/share/phpmyadmin/.htaccess"
-    echo "put there this text:"
-    echo "AuthType Basic"
-    echo "AuthName \"Restricted Files\""
-    echo "AuthUserFile /etc/phpmyadmin/.htpasswd"
-    echo "Require valid-user"
-    sudo vim /usr/share/phpmyadmin/.htaccess
+    echo "Автоматически создастся файл .htaccess в директории phpmyadmin /usr/share/phpmyadmin/:"
+    echo "AuthType Basic" | sudo tee -a /usr/share/phpmyadmin/.htaccess
+    echo "AuthName \"Restricted Files\"" | sudo tee -a /usr/share/phpmyadmin/.htaccess
+    echo "AuthUserFile /home/.htpasswd" | sudo tee -a /usr/share/phpmyadmin/.htaccess
+    echo "Require valid-user" | sudo tee -a /usr/share/phpmyadmin/.htaccess
+	echo "Файл создан просмотреть его можно с помощью команды: nano /usr/share/phpmyadmin/.htaccess"
+
     #create an .htpasswd file for authentication
     #set an additional package
     sudo apt-get install apache2-utils
     #ask user his username for protect phpmyadmin
-    read -p "Input your username for additional secure for phpmyadmin: " username
+    read -p "Введите/Создайте пользователя для доступа к phpmyadmin: " username
     #run command
-    sudo htpasswd -c /etc/phpmyadmin/.htpasswd $username
+    sudo htpasswd -c /home/.htpasswd $username
     
-    echo "protection has been set up"
+    echo "Защита настроена данные о пользователе и пароле находятся в файле: /home/.htpasswd"
   fi
 
  echo "$EMPTY$TITLE"
- echo "Congratulation, phpmyadmin has been installed"
- echo "to access it go here http://`hostname -I`/phpmyadmin"
+ echo "Поздравляем, установка и защита phpMyadmin закончена"
+ echo "Для доступа к панели управления пройдите по ссылке http://`hostname -I`/phpmyadmin"
 
 fi
 
@@ -342,7 +280,7 @@ fi
 #################
 # Install node.js
 #################
-read -p "Do you want to install NVM for node.js? [y/n]: " answer
+read -p "Хотите установить NVM для node.js? [y/n]: " answer
 if [ $answer == "y" ] ; then
   #get additional package
   sudo apt-get install build-essential libssl-dev
@@ -353,16 +291,16 @@ if [ $answer == "y" ] ; then
   #source the profile file
   source ~/.profile
   echo "$EMPTY$TITLE"
-  echo "for start using nvm you need reopen terminal"
-  echo "you can open in new tab new terminal and follow command bellow"
-  echo "set up needed node.js version"
-  echo "//to find out versions node.js that are available" 
+  echo "для использования nvm вы должны перезапустить терминал"
+  echo "вы можете открыть новый терминал в новой вкладке и следовать командам ниже"
+  echo "установка необходимой версии node.js"
+  echo "//для поиска доступных версий node.js введите:" 
   echo "nvm ls-remote"
-  echo "//you can install version by typing"
+  echo "//для установки нужной версии введите команду:"
   echo "nvm install 6.0.0"
-  echo "//tell nvm to use this version"
+  echo "//зайдате nvm использовать именно эту версию"
   echo "nvm use 6.0.0"
-  echo "//check version by the shell by typing"
+  echo "//проверить версию node.js"
   echo "node -v"
 
 fi
