@@ -263,7 +263,7 @@ if [ $answer == "y" ] ; then
     read -p "Введите/Создайте пользователя для доступа к phpmyadmin: " username
     #run command
     sudo htpasswd -c /home/.htpasswd $username
-    
+    sudo systemctl restart apache2
     echo "Защита настроена данные о пользователе и пароле находятся в файле: /home/.htpasswd"
   fi
 
