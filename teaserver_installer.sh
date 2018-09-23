@@ -21,8 +21,8 @@ dl_x86="wget --no-check-certificate https://repo.teaspeak.de/server/linux/x86/Te
   
 show_credits(){
 printf "${COLOR1}#######################################################${NC}\n"
-printf "${COLOR1}#     TeaSpeak Server script ${COLOR2}$scriptversion ${COLOR1}by ${COLOR2}aa1982${COLOR1}      #${NC}\n"
-printf "${COLOR1}#     Join our community at ${COLOR2}teaspeak.de${COLOR1}                  #${NC}\n"
+printf "${COLOR1}#     TeaSpeak Server script ${COLOR2}$scriptversion ${COLOR1}by ${COLOR2}aa1982${COLOR1}            #${NC}\n"
+printf "${COLOR1}#     Join our community at ${COLOR2}teaspeak.de${COLOR1}                #${NC}\n"
 printf "${COLOR1}#######################################################${NC}\n"
 }
 show_special_credits(){
