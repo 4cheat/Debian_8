@@ -320,7 +320,7 @@ if [ $check_for_updates -eq 1 ]; then
     printf "${COLOR1}Checking for script updates..."
     curl -s -m $timeout --head $call_home/script.php | head -n 1 | grep "HTTP/1.[01] [2].." > /dev/$
     if [ $? = 1 ];
-    then  printf "${COLOR2}\nServer for script update is not reachable.\nYou may restart the script to retry.\nPlease check teaspeak.de for news if it stays offline.\n${NC}"
+    then  printf "${COLOR2}\nServer for script update is not reachable.\n${NC}"
     else
         sversion=$(wget $call_home/script.php?version -q -O -)
         if [ $sversion \> $scriptversion ];
@@ -334,19 +334,22 @@ fi
 
 check_teaversion(){
 if [ $check_for_tsupdates -eq 1 ]; then
-    printf "${COLOR1}Checking for server updates..."
-	
-latest_tsversion="$(curl -k --silent https://repo.teaspeak.de/server/linux/$arch/latest)"
-current_tsversion="$(head -n 1 "/home/$TeaSpeakUser/TeaSpeak-server$version/buildVersion.txt")"
-current_tsversion="${current_version:11}"
-	
-    if [ $latest_tsversion \> $current_tsversion ];
-        then 
+    printf "${COLOR1}Checking for TeaServer updates..."
+    curl -s -m $timeout --head https://repo.teaspeak.de/server/linux/$arch/latest | head -n 1 | grep "HTTP/1.[01] [2].." > /dev/$
+    if [ $? = 1 ];
+    then  printf "${COLOR2}\nTeaServer for script update is not reachable.\nPlease check teaspeak.de for news if it stays offline.\n${NC}"
+    else
+	    latest_tsversion="$(curl -k --silent https://repo.teaspeak.de/server/linux/$arch/latest)"
+        current_tsversion="$(head -n 1 "/home/$TeaSpeakUser/TeaSpeak-server$version/buildVersion.txt")"
+        current_tsversion="${current_version:11}"
+		if [ $latest_tsversion \> $current_tsversion ];
+		   then 
 		    printf "${COLOR1}\nCurrent TeaSpeak server version - $current_tsversion\n${NC}"
 			printf "${COLOR1}\nA new server version ($latest_version) is available, update to ${COLOR2}$tsversion${COLOR1}\n${NC}"
-        else 
+           else 
 		    printf "${COLOR1}        ...server is up to date!\n${NC}"
-    fi
+		fi
+	fi	
 fi
 }
 
