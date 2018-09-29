@@ -427,8 +427,8 @@ if [[ $error_youtube_dl -eq 1 ]]
     $answer
     restart_script
 fi
-dpkg -l | grep nice >/dev/null && "yes" || "no"
-if [[ $? -ne no ]]
+dpkg -l | grep nice >/dev/null && || error_nice="1"
+if [[ $error_nice -eq 1 ]]
     then
     printf >&2 "${COLOR1}libnice is not installed, but required.\n Please type ${COLOR2}apt-get install libnice10${COLOR1} if you run Ubuntu or Debian or ${COLOR2}yum install libnice${COLOR1} if you run CentOS\n${NC}"
     read answer
