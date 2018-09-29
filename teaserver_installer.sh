@@ -128,7 +128,7 @@ else osv="x86"
 fi
 #set version
 version="_$os_$osv"
-TEASPEAK_VERSION="$(curl -s --connect-timeout 10 -S -L -k https://repo.teaspeak.de/server/${os}/${osv}/latest)"
+TEASPEAK_VERSION="$(curl -s --connect-timeout 10 -S -L -k https://repo.teaspeak.de/server/$os/$osv/latest)"
 }
 download_server(){
 cd /home/$TeaSpeakUser/
@@ -186,7 +186,7 @@ chown -R $TeaSpeakUser:$TeaSpeakUser TeaSpeak-server$version
 }
 kill_ts_server(){
 pkill -f TeaSpeakServer
-rm /home/$TeaSpeakUser/TeaSpeak-server$version/TeaSpeakServer.pid
+rm /home/$TeaSpeakUser/TeaSpeak-server$version/Tea.pid
 }
 #stop_acc_server(){
 #pkill -f AccountingServerEmulator-Linux
@@ -334,9 +334,9 @@ fi
 
 check_teaversion(){
 if [ $check_for_tsupdates -eq 1 ]; then
-    printf "${COLOR1}Checking for server updates..."
+    printf "${COLOR1}Checking for TeaServer updates..."
 	
-latest_tsversion="$(curl -k --silent https://repo.teaspeak.de/server/linux/$arch/latest)"
+latest_tsversion=$(curl -k --silent https://repo.teaspeak.de/server/linux/${arch}/latest)
 current_tsversion="$(head -n 1 "/home/$TeaSpeakUser/TeaSpeak-server$version/buildVersion.txt")"
 current_tsversion="${current_version:11}"
 	
