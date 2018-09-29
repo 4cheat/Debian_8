@@ -375,16 +375,15 @@ if [[ $error_sudo -eq 1 ]]
     restart_script
 fi
 
-command -v deb-multimedia-keyring >/dev/null 2>&1 || error_deb_multimedia_keyring="1"
+grep -rn "deb http://www.deb-multimedia.org jessie main non-free" /etc/apt/sources.list >/dev/null 2>&1 || error_deb_multimedia_keyring="1"
 if [[ $error_deb_multimedia_keyring -eq 1 ]]
     then
-    printf >&2 "${COLOR1}deb-multimedia-keyring are not installed, but required.\n Please type ${COLOR2}apt-get install deb-multimedia-keyring${COLOR1} if you run Ubuntu or Debian or ${COLOR2}yum install deb-multimedia-keyring${COLOR1} if you run CentOS\n${NC}"
     sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
     echo "deb http://www.deb-multimedia.org jessie main non-free" | sudo tee -a /etc/apt/sources.list
-    echo "deb-src http://www.deb-multimedia.org jessie main non-free" | sudo tee -a /etc/apt/sources.list    
+    apt-get update
+    printf >&2 "${COLOR1}deb-multimedia-keyring are not installed, but required.\n Please type ${COLOR2}apt-get install deb-multimedia-keyring${COLOR1} if you run Ubuntu or Debian or ${COLOR2}yum install deb-multimedia-keyring${COLOR1} if you run CentOS\n${NC}"
 	read answer
-    $answer
-	apt-get update && apt-get upgrade -y
+    $answer	
     restart_script
 fi
 
