@@ -186,7 +186,7 @@ chown -R $TeaSpeakUser:$TeaSpeakUser TeaSpeak-server$version
 }
 kill_ts_server(){
 pkill -f TeaSpeakServer
-rm /home/$TeaSpeakUser/TeaSpeak-server$version/Tea.pid
+rm /home/$TeaSpeakUser/TeaSpeak-server$version/tpid.pid
 }
 #stop_acc_server(){
 #pkill -f AccountingServerEmulator-Linux
