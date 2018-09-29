@@ -14,8 +14,8 @@ scriptversion="1.0"                                         #scriptversion
 tsversion="$TEASPEAK_VERSION"                               #version of teaspeak server
 call_home="http://gadza.ru"                                 #check for updates
 serverdir="/home/$TeaSpeakUser/TeaSpeak-server$version"     #Don't change this!
-dl_amd64="wget --no-check-certificate https://repo.teaspeak.de/server/linux/amd64/TeaSpeak-${tsversion}.tar.gz -O server.tar.gz"
-dl_x86="wget --no-check-certificate https://repo.teaspeak.de/server/linux/x86/TeaSpeak-${tsversion}.tar.gz -O server.tar.gz"
+dl_amd64="wget --no-check-certificate https://repo.teaspeak.de/server/linux/amd64/TeaSpeak-$tsversion.tar.gz -O server.tar.gz"
+dl_x86="wget --no-check-certificate https://repo.teaspeak.de/server/linux/x86/TeaSpeak-$tsversion.tar.gz -O server.tar.gz"
   
 #################################################################################################
   
@@ -128,7 +128,7 @@ else osv="x86"
 fi
 #set version
 version="_$os_$osv"
-TEASPEAK_VERSION="$(curl -s --connect-timeout 10 -S -L -k https://repo.teaspeak.de/server/${os}/${osv}/latest)"
+TEASPEAK_VERSION="$(curl -s --connect-timeout 10 -S -L -k https://repo.teaspeak.de/server/$os/$osv/latest)"
 }
 download_server(){
 cd /home/$TeaSpeakUser/
@@ -186,7 +186,7 @@ chown -R $TeaSpeakUser:$TeaSpeakUser TeaSpeak-server$version
 }
 kill_ts_server(){
 pkill -f TeaSpeakServer
-rm /home/$TeaSpeakUser/TeaSpeak-server$version/TeaSpeakServer.pid
+rm /home/$TeaSpeakUser/TeaSpeak-server$version/Tea.pid
 }
 #stop_acc_server(){
 #pkill -f AccountingServerEmulator-Linux
