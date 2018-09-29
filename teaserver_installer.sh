@@ -427,7 +427,7 @@ if [[ $error_youtube_dl -eq 1 ]]
     $answer
     restart_script
 fi
-grep "(libnice|libnice10)" />/dev/null 2>&1 || error_libnice10="1"
+command -v libgssdp />/dev/null 2>&1 || error_libnice10="1"
 if [[ $error_libnice10 -eq 1 ]]
     then
     printf >&2 "${COLOR1}libnice is not installed, but required.\n Please type ${COLOR2}apt-get install libnice10${COLOR1} if you run Ubuntu or Debian or ${COLOR2}yum install libnice${COLOR1} if you run CentOS\n${NC}"
