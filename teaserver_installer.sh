@@ -220,7 +220,7 @@ esac
 }
 install_anticrash(){
 rm /etc/init.d/TSanticrash.sh 2>/dev/null
-printf "#!/bin/bash\ncase "\$1" in\nts3server)\nt3server=\`ps ax | grep TeaSpeakServer | grep -v grep | wc -l\`\nif [ \$tea_server -eq 1 ]\nthen exit\nelse cd $serverdir/\n./teastart.sh start\nfi\n;;\nts3accounting)\nt3accounting=\`ps ax | grep AccountingServer | grep -v grep | wc -l\`\nif [ \$t3accounting -eq 1 ]\nthen exit\nelse\ncd $serverdir/\n./AccountingServerEmulator-Linux\nfi\n;;\nts3tsdns)\nt3tsdns=\`ps ax | grep tsdnsserver | grep -v grep | wc -l\`\nif [ \$t3tsdns -eq 2 ]\nthen exit\nelse\ncd $serverdir/tsdns\nscreen -AmdS tsdnsserver ./tsdnsserver\nfi\n;;\nesac\n" >> /etc/init.d/TSanticrash.sh
+printf "#!/bin/bash\ncase "\$1" in\nts3server)\nt3server=\`ps ax | grep TeaSpeakServer | grep -v grep | wc -l\`\nif [ \$tea_server -eq 1 ]\nthen exit\nelse cd $serverdir/\n./teastart.sh start\nfi\n;;\nesac\n" >> /etc/init.d/TSanticrash.sh
 chown $TeaSpeakUser:$TeaSpeakUser /etc/init.d/TSanticrash.sh
 chmod +x /etc/init.d/TSanticrash.sh
   
