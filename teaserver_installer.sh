@@ -339,9 +339,9 @@ if [ $check_for_tsupdates -eq 1 ]; then
     if [ $? = 1 ];
     then  printf "${COLOR2}\nTeaServer for script update is not reachable.\nPlease check teaspeak.de for news if it stays offline.\n${NC}"
     else
-	    latest_tsversion="$(curl -k --silent https://repo.teaspeak.de/server/linux/$arch/latest)"
-        current_tsversion="$(head -n 1 "/home/$TeaSpeakUser/TeaSpeak-server$version/buildVersion.txt")"
-        current_tsversion="${current_version:11}"
+	latest_version=$(curl -k --silent https://repo.teaspeak.de/server/linux/$arch/latest)
+    current_version=$(head -n 1 "/home/$TeaSpeakUser/TeaSpeak-server$version/buildVersion.txt")
+    current_version=${current_version:11}
 		if [ $latest_tsversion \> $current_tsversion ];
 		   then 
 		    printf "${COLOR1}\nCurrent TeaSpeak server version - $current_tsversion\n${NC}"
